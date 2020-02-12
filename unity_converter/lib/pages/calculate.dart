@@ -4,6 +4,9 @@ class CalculatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Teste'.toUpperCase(), style: TextStyle()),
+      ),
       body: Center(
         child: Padding(
           padding: EdgeInsets.only(top: 80, left: 30, right: 30, bottom: 30),
