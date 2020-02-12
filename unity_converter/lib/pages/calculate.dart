@@ -9,7 +9,7 @@ class CalculatePage extends StatelessWidget {
       ),
       body: Center(
         child: Padding(
-          padding: EdgeInsets.only(top: 80, left: 30, right: 30, bottom: 30),
+          padding: EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 30),
           child: Column(
             children: <Widget>[
               Hero(
