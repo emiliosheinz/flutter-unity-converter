@@ -2,25 +2,35 @@ import 'package:flutter/material.dart';
 
 class ConverterOptionRow extends StatelessWidget {
   final String title;
-  final IconData icon;
+  final String image;
   final Color color;
+  final Function onPress;
 
-  ConverterOptionRow(
-      {@required this.title, @required this.icon, @required this.color});
+  ConverterOptionRow({
+    @required this.title,
+    @required this.image,
+    @required this.color,
+    @required this.onPress,
+  });
 
   @override
   Widget build(BuildContext context) {
+    print('assets/icons/$image.png');
     return InkWell(
-      onTap: () => {print('BATATA')},
+      onTap: onPress,
       splashColor: color,
       highlightColor: color,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: <Widget>[
-            Icon(
-              icon,
-              size: 50,
+            Hero(
+              tag: image,
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: Image.asset('assets/icons/$image.png'),
+              ),
             ),
             SizedBox(
               width: 10,
