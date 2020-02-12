@@ -28,7 +28,16 @@ class CalculatePage extends StatelessWidget {
                       decoration: InputDecoration(hintText: 'Input'),
                     ),
                     DropdownButtonFormField(),
-                    Icon(Icons.compare_arrows),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Icon(
+                      Icons.compare_arrows,
+                      size: 50,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     TextFormField(
                       decoration: InputDecoration(hintText: 'Output'),
                     ),
