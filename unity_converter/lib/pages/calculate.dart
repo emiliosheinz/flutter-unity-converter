@@ -141,22 +141,24 @@ class _CalculatePageState extends State<CalculatePage> {
         ),
         backgroundColor: widget.appBarColor,
       ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 30),
-          child: Column(
-            children: <Widget>[
-              Hero(
-                tag: widget.image,
-                child: SizedBox(
-                  height: 120,
-                  width: 120,
-                  child: Image.asset('assets/icons/${widget.image}.png'),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 30),
+            child: Column(
+              children: <Widget>[
+                Hero(
+                  tag: widget.image,
+                  child: SizedBox(
+                    height: 120,
+                    width: 120,
+                    child: Image.asset('assets/icons/${widget.image}.png'),
+                  ),
                 ),
-              ),
-              SizedBox(height: 50),
-              _renderForm(),
-            ],
+                SizedBox(height: 50),
+                _renderForm(),
+              ],
+            ),
           ),
         ),
       ),
