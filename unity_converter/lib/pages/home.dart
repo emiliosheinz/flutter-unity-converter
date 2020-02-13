@@ -71,7 +71,11 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CalculatePage(),
+                    builder: (context) => CalculatePage(
+                      availableUnities: categories[index].unities,
+                      image: imageName,
+                      appBarColor: baseColors[index],
+                    ),
                   ),
                 );
               },
