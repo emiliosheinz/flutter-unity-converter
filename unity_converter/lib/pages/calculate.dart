@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:unity_converter/models/unit.dart';
 
 class CalculatePage extends StatefulWidget {
@@ -18,10 +19,15 @@ class CalculatePage extends StatefulWidget {
 class _CalculatePageState extends State<CalculatePage> {
   double selectedInputOption;
   double selectedOutputOption;
+  double inputValue;
+  TextEditingController outputFieldController = new TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
+    outputFieldController.text =
+        widget.availableUnities[1].conversion.toString();
 
     setState(() {
       selectedInputOption = widget.availableUnities[0].conversion;
@@ -32,7 +38,6 @@ class _CalculatePageState extends State<CalculatePage> {
   _getDropDownItems() {
     return widget.availableUnities.map<DropdownMenuItem<double>>(
       (UnitModel value) {
-        print(value.name);
         return DropdownMenuItem<double>(
           value: value.conversion,
           child: Text(value.name),
@@ -45,6 +50,12 @@ class _CalculatePageState extends State<CalculatePage> {
     return Column(
       children: <Widget>[
         TextFormField(
+          onChanged: (String newValue) {
+            setState(() {
+              inputValue = double.parse(newValue);
+            });
+          },
+          keyboardType: TextInputType.number,
           decoration: InputDecoration(
             labelText: 'Input',
             labelStyle: TextStyle(color: Colors.black),
@@ -79,15 +90,12 @@ class _CalculatePageState extends State<CalculatePage> {
     return Column(
       children: <Widget>[
         TextFormField(
+          enabled: false,
+          controller: outputFieldController,
           decoration: InputDecoration(
             labelText: 'Output',
             labelStyle: TextStyle(color: Colors.black),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.black,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
+            disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.grey,
               ),
@@ -125,6 +133,27 @@ class _CalculatePageState extends State<CalculatePage> {
             height: 10,
           ),
           _renderOutputFields(),
+          SizedBox(
+            height: 60,
+          ),
+          SizedBox(
+            height: 60,
+            width: double.infinity,
+            child: CupertinoButton(
+              onPressed: () {
+                outputFieldController.text =
+                    ((selectedOutputOption * inputValue) / selectedInputOption)
+                        .toString();
+              },
+              color: widget.appBarColor,
+              child: Text(
+                'CALCULAR',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -132,7 +161,6 @@ class _CalculatePageState extends State<CalculatePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(this.widget.availableUnities);
     return Scaffold(
       appBar: AppBar(
         title: Text(
