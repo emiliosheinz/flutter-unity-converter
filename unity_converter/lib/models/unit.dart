@@ -4,5 +4,5 @@ class UnitModel {
 
   UnitModel.fromJson(Map jsonMap)
       : name = jsonMap['name'],
-        conversion = jsonMap['conversion'];
+        conversion = jsonMap['conversion'].toDouble();
 }

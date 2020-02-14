@@ -1,24 +1,30 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:unity_converter/models/unit.dart';
+import 'package:unity_converter/services/api.dart';
 
 class CalculatePage extends StatefulWidget {
   final List<UnitModel> availableUnities;
   final String image;
   final Color appBarColor;
+  final bool isCurrency;
 
   CalculatePage(
       {@required this.availableUnities,
       @required this.image,
-      @required this.appBarColor});
+      @required this.appBarColor,
+      @required this.isCurrency});
 
   @override
   _CalculatePageState createState() => _CalculatePageState();
 }
 
 class _CalculatePageState extends State<CalculatePage> {
-  double selectedInputOption;
-  double selectedOutputOption;
+  UnitModel selectedInputOption;
+  UnitModel selectedOutputOption;
   double inputValue;
   TextEditingController outputFieldController = new TextEditingController();
 
@@ -30,16 +36,34 @@ class _CalculatePageState extends State<CalculatePage> {
         widget.availableUnities[1].conversion.toString();
 
     setState(() {
-      selectedInputOption = widget.availableUnities[0].conversion;
-      selectedOutputOption = widget.availableUnities[1].conversion;
+      selectedInputOption = widget.availableUnities[0];
+      selectedOutputOption = widget.availableUnities[1];
     });
   }
 
+  _calculateConversion() async {
+    String result = '';
+
+    if (!widget.isCurrency) {
+      result = ((selectedOutputOption.conversion * inputValue) /
+              selectedInputOption.conversion)
+          .toString();
+    } else {
+      Response resp = await Api().getConversion(
+          selectedInputOption.name, selectedOutputOption.name, inputValue);
+
+      final respMap = JsonDecoder().convert(resp.toString());
+      result = respMap['conversion'].toString();
+    }
+
+    outputFieldController.text = result;
+  }
+
   _getDropDownItems() {
-    return widget.availableUnities.map<DropdownMenuItem<double>>(
+    return widget.availableUnities.map(
       (UnitModel value) {
-        return DropdownMenuItem<double>(
-          value: value.conversion,
+        return DropdownMenuItem<UnitModel>(
+          value: value,
           child: Text(value.name),
         );
       },
@@ -71,11 +95,11 @@ class _CalculatePageState extends State<CalculatePage> {
             ),
           ),
         ),
-        DropdownButtonFormField(
+        DropdownButtonFormField<UnitModel>(
           isExpanded: true,
           value: selectedInputOption,
           icon: Icon(Icons.arrow_drop_down),
-          onChanged: (double newValue) {
+          onChanged: (UnitModel newValue) {
             setState(() {
               selectedInputOption = newValue;
             });
@@ -102,11 +126,11 @@ class _CalculatePageState extends State<CalculatePage> {
             ),
           ),
         ),
-        DropdownButtonFormField(
+        DropdownButtonFormField<UnitModel>(
           isExpanded: true,
           value: selectedOutputOption,
           icon: Icon(Icons.arrow_drop_down),
-          onChanged: (double newValue) {
+          onChanged: (UnitModel newValue) {
             setState(() {
               selectedOutputOption = newValue;
             });
@@ -140,11 +164,7 @@ class _CalculatePageState extends State<CalculatePage> {
             height: 60,
             width: double.infinity,
             child: CupertinoButton(
-              onPressed: () {
-                outputFieldController.text =
-                    ((selectedOutputOption * inputValue) / selectedInputOption)
-                        .toString();
-              },
+              onPressed: _calculateConversion,
               color: widget.appBarColor,
               child: Text(
                 'CALCULAR',

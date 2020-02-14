@@ -15,7 +15,6 @@ class ConverterOptionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('assets/icons/$image.png');
     return InkWell(
       onTap: onPress,
       splashColor: color,

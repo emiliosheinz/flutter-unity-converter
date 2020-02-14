@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:unity_converter/components/converter-option-row.dart';
 import 'package:unity_converter/models/category.dart';
 import 'package:unity_converter/models/unit.dart';
 import 'package:unity_converter/pages/calculate.dart';
+import 'package:unity_converter/services/api.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,10 +27,13 @@ class _HomePageState extends State<HomePage> {
   _loadPageData() async {
     final json = await DefaultAssetBundle.of(context)
         .loadString('assets/data/regular_units.json');
+    final currencyData = await Api().getCurrencyTypes();
 
     final jsonData = JsonDecoder().convert(json);
-
+    final currencyJson = JsonDecoder().convert(currencyData.toString());
+    print(currencyJson);
     List<CategoryModel> categoriesList = [];
+
     jsonData.keys.forEach((key) {
       List<UnitModel> unitiesList = [];
 
@@ -42,6 +45,14 @@ class _HomePageState extends State<HomePage> {
         CategoryModel(name: key, unities: unitiesList),
       );
     });
+
+    List<UnitModel> currencyUnitiesList = [];
+    currencyJson['units'].forEach((obj) {
+      currencyUnitiesList.add(UnitModel.fromJson(obj));
+    });
+
+    categoriesList
+        .add(CategoryModel(name: 'Currency', unities: currencyUnitiesList));
 
     setState(() {
       categories = categoriesList;
@@ -75,6 +86,7 @@ class _HomePageState extends State<HomePage> {
                       availableUnities: categories[index].unities,
                       image: imageName,
                       appBarColor: baseColors[index],
+                      isCurrency: itemName == 'Currency',
                     ),
                   ),
                 );
