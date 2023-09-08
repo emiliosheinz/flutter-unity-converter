@@ -6,6 +6,3 @@ This is a repo that I've used to learn more about Flutter and Dart, that App con
 - Dart
 - Json Server
 - Flutter Dio
-
-## :man: Contributors
-- @emilioheinz
